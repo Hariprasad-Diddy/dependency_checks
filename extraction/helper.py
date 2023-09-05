@@ -18,7 +18,7 @@ def tables_in_query(sql_str):
     Returns:
         _str_: table_name
     """
-    
+
     # remove the /* */ comments
     q = re.sub(r"/\*[^*]*\*+(?:[^*/][^*]*\*+)*/", "", sql_str)
 
@@ -42,7 +42,7 @@ def tables_in_query(sql_str):
                 result.append(tok)
             
             get_next = False
-        get_next = tok.lower() in ["from", "join","delete","update","insert","table"]
+        get_next = tok.lower() in ["from", "join","delete","update","table","into"]
 
     return result
 
