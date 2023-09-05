@@ -2,6 +2,50 @@ import pandas as pd
 
 
 all_queries = {
+    'dependent':"""SELECT DISTINCT '{replace_text}' as table_name,
+                        name as sp_name,
+                        command_status 
+                    FROM (select m.definition,
+                        o.name,
+                        'INSERT' as command_status
+                        FROM sys.sql_modules m
+                        INNER JOIN
+                        sys.objects o
+                        ON m.object_id = o.object_id
+                        where m.definition like '%INSERT INTO replace_text%'
+
+                        UNION ALL 
+
+                        select m.definition,
+                        o.name,
+                        'CREATE' as command_status
+                        FROM sys.sql_modules m
+                        INNER JOIN
+                        sys.objects o
+                        ON m.object_id = o.object_id
+                        where m.definition like '%CREATE TABLE replace_text%'
+
+                        UNION ALL 
+
+                        select m.definition,
+                        o.name,
+                        'UPDATE' as command_status
+                        FROM sys.sql_modules m
+                        INNER JOIN
+                        sys.objects o
+                        ON m.object_id = o.object_id
+                        where m.definition like '%UPDATE replace_text%'
+
+                        UNION ALL 
+
+                        select m.definition,
+                        o.name,
+                        'SELECT' as command_status
+                        FROM sys.sql_modules m
+                        INNER JOIN
+                        sys.objects o
+                        ON m.object_id = o.object_id
+                        where m.definition like '%from replace_text%')t""",
     'all_sps':"""
             select m.definition as query_txt,
                 o.name
