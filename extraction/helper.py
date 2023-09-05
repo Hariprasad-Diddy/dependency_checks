@@ -42,7 +42,7 @@ def tables_in_query(sql_str):
                 result.append(tok)
             
             get_next = False
-        get_next = tok.lower() in ["from", "join"]
+        get_next = tok.lower() in ["from", "join","delete","update","insert","table"]
 
     return result
 

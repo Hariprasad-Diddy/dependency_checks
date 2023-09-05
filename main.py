@@ -29,13 +29,10 @@ if __name__ == '__main__':
     query_details = input('Enter the data required based on date level / user_level / all_sps : ')
     # date_range = input('Enter how month many data required to extract : ')
 
-    list_sps = [
-                'sp_studio_content_performance'
+    list_sps = ['sp_studio_behaviour_by_source',
                 ]
 
-    
-        
-    # for platform in all_platform:
+        # for platform in all_platform:
     platform_dict = {
                     'clickstream':ClickstreamDB(),
                     'commerce':CommerceDB(),
@@ -59,8 +56,6 @@ if __name__ == '__main__':
     connection = database_connection_instance.db_connection(config_details.config[platform])
     cursor = connection.cursor()
 
-    # mysql_instance = MySQLDB()
-    # mysql_connection = mysql_instance.db_connection(config_details.config[platform_dict[platform]])
     # print("Connected to MySql Instance...!",mysql_connection)
     file_exists = FileExist().check_path_exists(output_file_name)
     
@@ -70,5 +65,4 @@ if __name__ == '__main__':
                     }
         
         table_extraction(query_dict[query_details],connection,output_format_dict.get(output_format),output_file_name,each_sp)
-        print(f"{each_sp} extracted...!")
         
