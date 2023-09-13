@@ -9,6 +9,33 @@ class Mail:
     def send_mail(self):
         ...
 
+def merge_files(source_folder_name,output_format,output_file_name):
+
+    BASE_DIR = Path(__file__).resolve().parent.parent
+
+    output = output_format()
+
+    output_folder = os.path.join(BASE_DIR,f'dependencies_check/{source_folder_name}')
+    # print(output_folder,"folder")
+    list_of_files =os.listdir(output_folder)
+    main_df = []
+    for each_file in list_of_files:
+
+        if each_file in 'output.xlsx' or '~$' in each_file:
+            continue
+        else:
+            file_path = os.path.join(output_folder,each_file)
+            try:
+                df = pd.read_excel(file_path,header=0,engine='openpyxl',sheet_name=str(each_file).split('.')[0] + '_table_details')
+                main_df.append(df)
+            except:
+                print(each_file)
+                pass
+
+    df = pd.concat(main_df,ignore_index=True)
+    
+    output.save(df,output_file_name,f'{output_file_name}')
+    
 def tables_in_query(sql_str):
     """function will extract table names from the given query or StoredProcedure
 
@@ -38,10 +65,10 @@ def tables_in_query(sql_str):
     get_next = False
     for tok in tokens:
         if get_next:
-            if tok.lower() not in ["", "select"]:
+            if tok.lower() not in ["", "select","into","from","delete","statistics","join","if","end","begin","update","table","with"]:
                 result.append(tok)
             
-            get_next = False
+            get_next = False        
         get_next = tok.lower() in ["from", "join","delete","update","table","into"]
 
     return result
@@ -62,7 +89,6 @@ def table_extraction(query_details,connection,output_format,output_file_name,eac
     pd.set_option('display.max_columns', 500)
     
     data1=pd.read_sql(query_details,connection)
-    
     if data1.empty:
         pass
     else:
@@ -103,10 +129,12 @@ def table_extraction(query_details,connection,output_format,output_file_name,eac
             .drop("variable", axis=1) \
             .dropna()
         
-
+        
         df3=df2['tables'].unique()
 
         df3=pd.DataFrame(df3)
         # df3.to_excel(df3,'final_output.xlsx')
+        df3.columns = ["table_name"]
+        df3['sp_name'] = pd.Series([each_sp for x in range(len(df3.index))])
         output.save(df3,output_file_name,f'{each_sp}_table_details')
         

@@ -54,6 +54,7 @@ all_queries = {
                 sys.objects o
                 ON m.object_id = o.object_id
                 where m.definition like '%replace_text%'
+                AND name like '%replace_text%'
             """,
     'month_level' : """select query_txt
                         from adhoc_query.adhoc_query_log 

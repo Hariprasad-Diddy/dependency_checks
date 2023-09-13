@@ -25,11 +25,11 @@ if __name__ == '__main__':
 
     platform = input('Enter the platform name to read data : ')
     output_format = input('Enter the output format Eg :- excel / csv : ')
-    output_file_name = input('Enter the output filename : ')
+    # output_file_name = input('Enter the output filename : ')
     query_details = input('Enter the data required based on date level / user_level / all_sps : ')
     # date_range = input('Enter how month many data required to extract : ')
 
-    list_sps = ['sp_studio_behaviour_by_source',
+    list_sps = ['studio_content_performance','sp_studio_behaviour_by_source'
                 ]
 
         # for platform in all_platform:
@@ -55,14 +55,42 @@ if __name__ == '__main__':
     database_connection_instance = platform_dict.get(platform)
     connection = database_connection_instance.db_connection(config_details.config[platform])
     cursor = connection.cursor()
-
-    # print("Connected to MySql Instance...!",mysql_connection)
-    file_exists = FileExist().check_path_exists(output_file_name)
     
     for each_sp in list_sps:
+        output_file_name = each_sp
+        file_exists = FileExist().check_path_exists(output_file_name)
         query_dict = {
                     'all_sps':all_queries.get(query_details).replace('replace_text',each_sp)
                     }
         
         table_extraction(query_dict[query_details],connection,output_format_dict.get(output_format),output_file_name,each_sp)
+        print(each_sp)
+
+    merge_files('output',output_format_dict.get(output_format),'merged_data')  
+    
+    
+
+    # data = """"""
+    # data_df = []
+    # for each_sp in list_sps:
+    #     query_dict = {
+    #                 'all_sps':all_queries.get(query_details).replace('replace_text',each_sp)
+    #                 }
+    #     cursor.execute(query_dict.get('all_sps'))
+            
+    #     for sql in cursor.fetchone():
+    #         data += f"""{sql}"""
         
+        
+    #     for line_query in data.splitlines():
+            
+    #         if line_query.lower().find("drop table") >= 0:
+    #             two_dimensional = []
+    #             split_line = line_query.split(' ')
+    #             file_table_list = list(filter(None, split_line))
+    #             # c += 1
+    #             two_dimensional.append(each_sp)
+    #             two_dimensional.append(file_table_list[-1].replace(';',''))
+    #             data_df.append(two_dimensional)
+    # df = pd.DataFrame(data_df,columns=['sp_name','table_name'])
+    # df.to_csv('/Users/hari.prasad.vc/Desktop/table_list2.csv',index=False)
