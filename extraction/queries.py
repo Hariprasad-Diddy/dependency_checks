@@ -12,7 +12,8 @@ all_queries = {
                         INNER JOIN
                         sys.objects o
                         ON m.object_id = o.object_id
-                        where m.definition like '%INSERT INTO replace_text%'
+                        where m.definition like '%INSERT INTO replace_table_name%'
+                        AND o.name = 'replace_sp_name'
 
                         UNION ALL 
 
@@ -23,7 +24,8 @@ all_queries = {
                         INNER JOIN
                         sys.objects o
                         ON m.object_id = o.object_id
-                        where m.definition like '%CREATE TABLE replace_text%'
+                        where m.definition like '%CREATE TABLE replace_table_name%'
+                        AND o.name = 'replace_sp_name'
 
                         UNION ALL 
 
@@ -34,7 +36,8 @@ all_queries = {
                         INNER JOIN
                         sys.objects o
                         ON m.object_id = o.object_id
-                        where m.definition like '%UPDATE replace_text%'
+                        where m.definition like '%UPDATE replace_table_name%'
+                        AND o.name = 'replace_sp_name'
 
                         UNION ALL 
 
@@ -45,7 +48,8 @@ all_queries = {
                         INNER JOIN
                         sys.objects o
                         ON m.object_id = o.object_id
-                        where m.definition like '%from replace_text%')t""",
+                        where m.definition like '%from replace_table_name%'
+                        AND o.name = 'replace_sp_name')t""",
     'all_sps':"""
             select m.definition as query_txt,
                 o.name
@@ -54,7 +58,7 @@ all_queries = {
                 sys.objects o
                 ON m.object_id = o.object_id
                 where m.definition like '%replace_text%'
-                AND name like '%replace_text%'
+                AND name = 'replace_text'
             """,
     'month_level' : """select query_txt
                         from adhoc_query.adhoc_query_log 

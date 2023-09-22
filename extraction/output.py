@@ -11,17 +11,18 @@ class OutputPath:
         
         self.output_file_name = os.path.join(self.output_folder,output_file_name)
         
-
 class FileExist(OutputPath):
 
     def __init__(self):
         ...
     
-    def check_path_exists(self,output_file_name):
+    def create_or_replace_file(self,output_file_name):
         super().__init__(output_file_name)
 
         if os.path.exists(self.output_file_name):
-            pass
+            os.remove(self.output_file_name)
+            workbook = xlsxwriter.Workbook(f'{self.output_file_name}.xlsx')
+            workbook.close()
         else:
             workbook = xlsxwriter.Workbook(f'{self.output_file_name}.xlsx')
             workbook.close()

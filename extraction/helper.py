@@ -15,8 +15,8 @@ def merge_files(source_folder_name,output_format,output_file_name):
 
     output = output_format()
 
-    output_folder = os.path.join(BASE_DIR,f'dependencies_check/{source_folder_name}')
-    # print(output_folder,"folder")
+    output_folder = os.path.join(BASE_DIR,f'{source_folder_name}')
+    
     list_of_files =os.listdir(output_folder)
     main_df = []
     for each_file in list_of_files:
@@ -35,7 +35,7 @@ def merge_files(source_folder_name,output_format,output_file_name):
     df = pd.concat(main_df,ignore_index=True)
     
     output.save(df,output_file_name,f'{output_file_name}')
-    
+
 def tables_in_query(sql_str):
     """function will extract table names from the given query or StoredProcedure
 
