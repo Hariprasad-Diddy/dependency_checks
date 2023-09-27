@@ -12,8 +12,8 @@ import re
 from extraction.queries import all_queries
 from extraction.helper import *
 from extraction.output import *
-
-
+from extraction.method_extraction import TableNames,Commands
+from extraction.method_extraction import MergeData
 
 if __name__ == '__main__':
     
@@ -22,18 +22,16 @@ if __name__ == '__main__':
     # get the query level details from user eg. month_level/user_count_level/query_count_level
     # get the date range details from user Eg. SD 2023-01-01 ED 2023-02-01 OR 
     # get month level example 1,2 like that and get current day minus number of months data
-
-    platform = input('Enter the platform name to read data : ')
-    output_format = input('Enter the output format Eg :- excel / csv : ')
-    output_file_name = input('Enter the output filename : ')
-    query_details = input('Enter the data required based on date level / user_level / all_sps : ')
+    platform : str = input('Enter the platform name to read data : ')
+    output_format : str = input('Enter the output format Eg :- excel / csv : ')
+    final_file_name : str = input('Enter the output file name : ')
+    query_details : str = 'all_sps' #input('Enter the data required based on date level / user_level / all_sps : ')
     # date_range = input('Enter how month many data required to extract : ')
-
-    list_sps = ['sp_studio_behaviour_by_source',
-                ]
+    
+    list_sps : list[str] = read_input()
 
         # for platform in all_platform:
-    platform_dict = {
+    platform_dict : dict = {
                     'clickstream':ClickstreamDB(),
                     'commerce':CommerceDB(),
                     'personify':PersonifyDB(),
@@ -46,23 +44,42 @@ if __name__ == '__main__':
                     'biforst':BifrostDB()
                     }
     
-    output_format_dict = {
+    output_format_dict : dict = {
                     'excel':Excel,
                     'csv':CSV
                     }
-    config_details = ConfigInformation('configuration','config.ini')
+    config_details : ConfigInformation = ConfigInformation('configuration','config.ini')
     
     database_connection_instance = platform_dict.get(platform)
     connection = database_connection_instance.db_connection(config_details.config[platform])
     cursor = connection.cursor()
-
-    # print("Connected to MySql Instance...!",mysql_connection)
-    file_exists = FileExist().check_path_exists(output_file_name)
     
-    for each_sp in list_sps:
-        query_dict = {
-                    'all_sps':all_queries.get(query_details).replace('replace_text',each_sp)
-                    }
-        
-        table_extraction(query_dict[query_details],connection,output_format_dict.get(output_format),output_file_name,each_sp)
-        
+    TableNames().table_name_extraction(
+                    list_sps,
+                    all_queries,
+                    query_details,
+                    connection,
+                    output_format_dict,
+                    output_format,
+                    FileExist,
+                    table_extraction
+                    )
+    
+
+    file_exists : FileExist = FileExist().create_or_replace_file('merged_data')
+    merge_files('output',output_format_dict.get(output_format),'merged_data')  
+    
+    
+
+    commands : Commands = Commands()
+    data_df : list = commands.table_command_extraction(
+            list_sps,
+            all_queries,
+            query_details,
+            cursor,
+            output_format_dict,
+            output_format,
+            FileExist)
+
+    merge : MergeData = MergeData()
+    merge.merge_data_files(data_df,final_file_name)
