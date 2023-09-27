@@ -1,8 +1,11 @@
 import re
+import os
+from pathlib import Path
+from io import StringIO
 import pandas as pd
 import numpy as np
-from extraction.output import *
-from extraction.queries import *
+# from extraction.output import *
+# from extraction.queries import *
 
 class Mail:
 
@@ -29,7 +32,6 @@ def merge_files(source_folder_name,output_format,output_file_name):
                 df = pd.read_excel(file_path,header=0,engine='openpyxl',sheet_name=str(each_file).split('.')[0] + '_table_details')
                 main_df.append(df)
             except:
-                print(each_file)
                 pass
 
     df = pd.concat(main_df,ignore_index=True)
@@ -137,4 +139,17 @@ def table_extraction(query_details,connection,output_format,output_file_name,eac
         df3.columns = ["table_name"]
         df3['sp_name'] = pd.Series([each_sp for x in range(len(df3.index))])
         output.save(df3,output_file_name,f'{each_sp}_table_details')
-        
+
+
+
+
+
+def read_input() -> list:
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    input_path = os.path.join(BASE_DIR,'input.csv')
+    
+    list_sps = []
+    with open(input_path,'r') as f:
+        for sp in f.readlines():    
+            list_sps.append(re.sub('\n','',sp))
+    return list_sps
