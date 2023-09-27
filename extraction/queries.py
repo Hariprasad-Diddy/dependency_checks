@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-all_queries = {
+all_queries : dict = {
     'dependent':"""SELECT DISTINCT '{replace_text}' as table_name,
                         name as sp_name,
                         command_status 
