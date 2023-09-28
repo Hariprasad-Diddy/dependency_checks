@@ -166,5 +166,4 @@ def read_input() -> list:
     with open(input_path,'r') as f:
         for sp in f.readlines():    
             list_sps.append(re.sub('\n','',sp))
-            
     return list_sps

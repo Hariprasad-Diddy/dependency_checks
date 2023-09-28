@@ -1,14 +1,3 @@
-# import pandas as pd
-# from pandas import *
-# import numpy as np
-
-# import csv
-# import json
-# import re
-# import datetime
-# from pytz import timezone
-
-
 import pyodbc
 from mysql.connector import Error
 import mysql.connector
@@ -17,11 +6,22 @@ import jaydebeapi
 
 
 class CommerceDB:
-
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
 
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         self.cnxn = pyodbc.connect('DRIVER='+str(creds['driver'])+';SERVER='+str(creds['server'])+';PORT='+str(creds['port'])+';DATABASE='+str(creds['database'])+';UID='+str(creds['username'])+';PWD='+str(creds['password']))
         self.cnxn.autocommit = True
 
@@ -29,11 +29,22 @@ class CommerceDB:
 
 
 class ClickstreamDB:
-
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
 
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         self.cnxn = pyodbc.connect('DRIVER='+str(creds['driver'])+';SERVER='+str(creds['server'])+';PORT='+str(creds['port'])+';DATABASE='+str(creds['database'])+';UID='+str(creds['username'])+';PWD='+str(creds['password']))
         self.cnxn.autocommit = True
 
@@ -43,11 +54,22 @@ class ClickstreamDB:
 
 
 class PersonifyDB:
-    
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
 
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
             connection = mysql.connector.connect(host=creds['host'],
                                                 database=creds['database'],
@@ -64,11 +86,22 @@ class PersonifyDB:
 
 
 class AdhocQueryDB:
-
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
     
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
             connection = mysql.connector.connect(host=creds['host'],
                                                 database=creds['database'],
@@ -85,11 +118,22 @@ class AdhocQueryDB:
 
 
 class RBACDB:
-
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
     
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
             connection = mysql.connector.connect(host=creds['host'],
                                                 database=creds['database'],
@@ -107,11 +151,22 @@ class RBACDB:
 
 
 class ErrorManagementDB:
-
-    def __init__(self):
+    """_summary_
+    """
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
     
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
             connection = mysql.connector.connect(host=creds['host'],
                                                 database=creds['database'],
@@ -130,10 +185,20 @@ class ErrorManagementDB:
 
 class BifrostDB:
     """ Test Bifrost DB connection"""
-    def __init__(self):
+    def __init__(self) -> None:
+        """_summary_
+        """
         ...
     
-    def db_connection(self,creds):
+    def db_connection(self,creds) -> None:
+        """_summary_
+
+        Args:
+            creds (_type_): _description_
+
+        Returns:
+            _type_: _description_
+        """
         try:
             path = '/home/myntra/Drivers/bifrost-jdbc-2.0-20210826.145828-2.jar'
             connection = jaydebeapi.connect("com.myntra.bifrost.jdbc.BifrostDriver",
